@@ -1,12 +1,15 @@
 package com.example.android.bookshow;
 
 import android.app.LoaderManager;
+import android.content.Intent;
 import android.content.Loader;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -17,7 +20,6 @@ public class BooksActivity extends AppCompatActivity implements LoaderManager.Lo
 
     private WordAdapter mAdapter;
     private TextView emptyTextView;
-    public static final String BOOKS_URL = "https://www.googleapis.com/books/v1/volumes?q=python&maxResults=2";
     public static final int LOADER_ID = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,26 @@ public class BooksActivity extends AppCompatActivity implements LoaderManager.Lo
         // Set the adapter on the {@link ListView}
         // so the list can be populated in the user interface
         list.setAdapter(mAdapter);
+
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                // Find the current earthquake that was clicked on
+                Word currentBook = mAdapter.getItem(position);
+
+                if(currentBook.getUrl()!= null) {
+                    // Convert the String URL into a URI object (to pass into the Intent constructor)
+                    Uri booksUri = Uri.parse(currentBook.getUrl());
+
+
+                    // Create a new intent to view the earthquake URI
+                    Intent websiteIntent = new Intent(Intent.ACTION_VIEW, booksUri);
+
+                    // Send the intent to launch a new activity
+                    startActivity(websiteIntent);
+                }
+            }
+        });
 
         ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo connectivityStatus = cm.getActiveNetworkInfo();

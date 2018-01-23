@@ -35,20 +35,19 @@ public class WordAdapter extends ArrayAdapter<Word>{
 
         Word currentWord = getItem(position);
 
-        //ImageView image = (ImageView) listItemView.findViewById(R.id.image);
-        //image.setImageResource(currentWord.getThumbnail());
-
         TextView title = (TextView) listItemView.findViewById(R.id.title);
         title.setText(currentWord.getTitle());
 
         TextView author = (TextView) listItemView.findViewById(R.id.authorName);
         author.setText(currentWord.getAuthor());
 
-        //TextView price = (TextView) listItemView.findViewById(R.id.price);
-        //price.setText(currentWord.getPublishedDate());
-
         ImageView imageView = (ImageView) listItemView.findViewById(R.id.image);
         imageView.setImageBitmap(currentWord.getImage());
+
+        if(currentWord.getPages().length() > 0) {
+            TextView pagesCount = (TextView) listItemView.findViewById(R.id.pages);
+            pagesCount.setText(currentWord.getPages());
+        }
 
         return listItemView;
     }

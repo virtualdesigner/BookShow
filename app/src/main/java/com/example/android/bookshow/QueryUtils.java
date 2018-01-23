@@ -37,7 +37,6 @@ public final class QueryUtils {
             JSONObject jsonObject = new JSONObject(JSON_RESPONSE);
             JSONArray items = jsonObject.getJSONArray("items");
             for(int i =0; i<items.length();i++){
-
                 JSONObject seperateObject = (JSONObject) items.get(i);
                 JSONObject volumeInfo = seperateObject.getJSONObject("volumeInfo");
                 String title = volumeInfo.getString("title");
@@ -45,7 +44,6 @@ public final class QueryUtils {
                 String authors = "";
                 if(volumeInfo.has("authors")) {
                     JSONArray authorsArray = volumeInfo.getJSONArray("authors");
-
                     if(authorsArray.length()>1) {
                         for (int j = 0; j < authorsArray.length(); j++) {
                             if(j==(authorsArray.length())-1){
@@ -59,32 +57,31 @@ public final class QueryUtils {
                         authors = "By " + authorsArray.getString(0);
                     }
                 }
-
-                String publisher="";
                 String thumbnail = "";
                 if(volumeInfo.has("imageLinks")) {
                     thumbnail = volumeInfo.getJSONObject("imageLinks").getString("smallThumbnail");
                 }
-                String previewLink = volumeInfo.getString("previewLink");
-                String buyLink = volumeInfo.getString("infoLink");
-                if(volumeInfo.has("publisher")) {
-                    publisher = volumeInfo.getString("publisher");
+                String pages = "";
+                if(volumeInfo.has("pageCount")) {
+
+                    int page = volumeInfo.getInt("pageCount");
+                    pages = page+" Pages";
                 }
-                //if(volumeInfo.getString("publishedDate")!= null) {
-                 //   String publishedDate = volumeInfo.getString("publishedDate");
-                //}
-                String price = "Free";
+
+
+
+                String url = null;
+                if(volumeInfo.has("infoLink")) {
+                    url = volumeInfo.getString("infoLink");
+                }
                 Bitmap image = makeImage(thumbnail);
-                if(volumeInfo.has("price")) {
-                    price = volumeInfo.getString("price");
-                }
-                myList.add(new Word(title,authors,thumbnail,previewLink,buyLink,publisher,price,image));
+
+                myList.add(new Word(title,authors,image,pages,url));
 
             }
         }catch (JSONException e){
             Log.e("QueryUtils","Problem parsing JSON",e);
         }
-
         return myList;
     }
 
@@ -129,8 +126,8 @@ public final class QueryUtils {
 
         try{
             httpURLConnection = (HttpURLConnection) url.openConnection();
-            httpURLConnection.setReadTimeout(150000);
-            httpURLConnection.setConnectTimeout(200000);
+            httpURLConnection.setReadTimeout(15000);
+            httpURLConnection.setConnectTimeout(20000);
             httpURLConnection.setRequestMethod("GET");
             httpURLConnection.connect();
 

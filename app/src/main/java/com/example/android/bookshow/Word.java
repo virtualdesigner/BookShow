@@ -8,54 +8,26 @@ import android.graphics.Bitmap;
 
 public class Word {
 
-    private String  mAuthor,mTitle,mThumbnail,mPreviewLink,mBuyLink,mPublisher,mPrice;
+    private String  mAuthor,mTitle, mUrl,  mPages;
     Bitmap mImage;
-    int mPublishedDate;
-    public Word(String title, String author, String thumbnail, String previewLink, String buyLink, String publisher, String price, Bitmap image){
+
+    public Word(String title, String author, Bitmap image, String pages, String url){
         mTitle = title;
         mAuthor = author;
-        mThumbnail = thumbnail;
-        mPreviewLink = previewLink;
-        mBuyLink = buyLink;
-        mPublisher = publisher;
-        mPrice = price;
-        //mPublishedDate = publishedDate;
         mImage = image;
+        mPages = pages;
+        mUrl = url;
     }
-
-
 
     public String getAuthor(){
         return mAuthor;
     }
 
-    public String getPublisher(){
-        return mPublisher;
-    }
-
-    public int getPublishedDate(){
-        return mPublishedDate;
-    }
-
-    public String getPreviewLink(){
-        return mPreviewLink;
-    }
-
-    public String getBuyLink(){
-        return mBuyLink;
-    }
-
-    public String getTitle(){
-        return mTitle;
-    }
-
-    public String getThumbnail(){
-        return mThumbnail;
-    }
-
-    public String getPrice(){
-        return mPrice;
-    }
+    public String getTitle(){ return mTitle; }
 
     public Bitmap getImage(){ return mImage; }
+
+    public String getPages(){ return mPages; }
+
+    public String getUrl(){ return mUrl; }
 }

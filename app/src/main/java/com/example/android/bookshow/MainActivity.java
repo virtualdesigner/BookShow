@@ -9,7 +9,7 @@ import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static String content = "";
+    public static String content;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
