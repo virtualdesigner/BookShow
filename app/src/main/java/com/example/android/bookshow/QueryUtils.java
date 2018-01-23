@@ -1,5 +1,7 @@
 package com.example.android.bookshow;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -33,26 +35,55 @@ public final class QueryUtils {
         List<Word> myList = new ArrayList<>();
         try {
             JSONObject jsonObject = new JSONObject(JSON_RESPONSE);
-            JSONArray jsonArray = jsonObject.getJSONArray("items");
-            for(int i =0; i<jsonArray.length();i++){
+            JSONArray items = jsonObject.getJSONArray("items");
+            for(int i =0; i<items.length();i++){
 
-                JSONObject volumeInfo = jsonArray.getJSONObject(0);
-                //String title = volumeInfo.getString("");
-                String author = volumeInfo.getJSONArray("authors").getString(0);
-                //String thumbnail = volumeInfo.getJSONObject("imageLinks").getString("smallThumbnail");
-               // String previewLink = volumeInfo.getString("previewLink");
-               // String buyLink = volumeInfo.getString("infoLink");
-                //String publisher = volumeInfo.getString("publisher");
-                //String publishedDate = volumeInfo.getString("publishedDate");
-                //String price = volumeInfo.getString("price");
+                JSONObject seperateObject = (JSONObject) items.get(i);
+                JSONObject volumeInfo = seperateObject.getJSONObject("volumeInfo");
+                String title = volumeInfo.getString("title");
+                String author = "";
+                String authors = "";
+                if(volumeInfo.has("authors")) {
+                    JSONArray authorsArray = volumeInfo.getJSONArray("authors");
 
-                myList.add(new Word( author));
+                    if(authorsArray.length()>1) {
+                        for (int j = 0; j < authorsArray.length(); j++) {
+                            if(j==(authorsArray.length())-1){
+                                author += authorsArray.getString(j);
+                            }else {
+                                author += authorsArray.getString(j) + ", ";
+                            }
+                        }
+                        authors = "By " + author;
+                    }else{
+                        authors = "By " + authorsArray.getString(0);
+                    }
+                }
+
+                String publisher="";
+                String thumbnail = "";
+                if(volumeInfo.has("imageLinks")) {
+                    thumbnail = volumeInfo.getJSONObject("imageLinks").getString("smallThumbnail");
+                }
+                String previewLink = volumeInfo.getString("previewLink");
+                String buyLink = volumeInfo.getString("infoLink");
+                if(volumeInfo.has("publisher")) {
+                    publisher = volumeInfo.getString("publisher");
+                }
+                //if(volumeInfo.getString("publishedDate")!= null) {
+                 //   String publishedDate = volumeInfo.getString("publishedDate");
+                //}
+                String price = "Free";
+                Bitmap image = makeImage(thumbnail);
+                if(volumeInfo.has("price")) {
+                    price = volumeInfo.getString("price");
+                }
+                myList.add(new Word(title,authors,thumbnail,previewLink,buyLink,publisher,price,image));
 
             }
         }catch (JSONException e){
             Log.e("QueryUtils","Problem parsing JSON",e);
         }
-
 
         return myList;
     }
@@ -98,8 +129,8 @@ public final class QueryUtils {
 
         try{
             httpURLConnection = (HttpURLConnection) url.openConnection();
-            httpURLConnection.setReadTimeout(10000);
-            httpURLConnection.setConnectTimeout(15000);
+            httpURLConnection.setReadTimeout(150000);
+            httpURLConnection.setConnectTimeout(200000);
             httpURLConnection.setRequestMethod("GET");
             httpURLConnection.connect();
 
@@ -136,5 +167,37 @@ public final class QueryUtils {
 
 
         return jsonString.toString();
+    }
+
+    private static Bitmap makeImage(String ImageUrl){
+        Bitmap bitmapImage = null;
+        InputStream ins = null;
+
+        URL imageUrl = createUrl(ImageUrl);
+
+        if(ImageUrl == null){
+
+            Log.e("Queryutils","ImageUrl null!");
+            return null;
+
+        }
+        try{
+
+            HttpURLConnection httpURLConnection =(HttpURLConnection) imageUrl.openConnection();
+            httpURLConnection.setReadTimeout(200000);
+            httpURLConnection.setConnectTimeout(500000);
+            httpURLConnection.setRequestMethod("GET");
+            httpURLConnection.connect();
+            int responseCode = httpURLConnection.getResponseCode();
+            if(responseCode == 200){
+                ins = httpURLConnection.getInputStream();
+                bitmapImage = BitmapFactory.decodeStream(ins);
+            }
+        }catch (IOException e){
+
+            Log.e("QueryUtils","Image input stream exception");
+
+        }
+        return bitmapImage;
     }
 }

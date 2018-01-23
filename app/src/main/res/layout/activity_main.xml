@@ -1,9 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ListView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.android.bookshow.MainActivity">
+    android:orientation="vertical"
+    >
 
-</ListView>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="Enter the Book Name"
+        android:layout_marginTop="180dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:id="@+id/enterText"/>
+    <Button
+        android:id="@+id/bookButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Book Show"
+        android:layout_marginLeft="135dp"/>
+
+</LinearLayout>

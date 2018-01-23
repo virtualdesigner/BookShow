@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -37,14 +38,17 @@ public class WordAdapter extends ArrayAdapter<Word>{
         //ImageView image = (ImageView) listItemView.findViewById(R.id.image);
         //image.setImageResource(currentWord.getThumbnail());
 
-        //TextView title = (TextView) listItemView.findViewById(R.id.title);
-        //title.setText(currentWord.getTitle());
+        TextView title = (TextView) listItemView.findViewById(R.id.title);
+        title.setText(currentWord.getTitle());
 
         TextView author = (TextView) listItemView.findViewById(R.id.authorName);
         author.setText(currentWord.getAuthor());
 
         //TextView price = (TextView) listItemView.findViewById(R.id.price);
-        //price.setText(currentWord.getPrice());
+        //price.setText(currentWord.getPublishedDate());
+
+        ImageView imageView = (ImageView) listItemView.findViewById(R.id.image);
+        imageView.setImageBitmap(currentWord.getImage());
 
         return listItemView;
     }
