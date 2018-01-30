@@ -26,7 +26,7 @@ import java.util.List;
 
 public final class QueryUtils {
 
-    public static List<Word> extractFeatureFromJson(String JSON_RESPONSE){
+    public static List<Word> extractFeatureFromJson(String JSON_RESPONSE) {
 
         if (TextUtils.isEmpty(JSON_RESPONSE)) {
             return null;
@@ -36,56 +36,55 @@ public final class QueryUtils {
         try {
             JSONObject jsonObject = new JSONObject(JSON_RESPONSE);
             JSONArray items = jsonObject.getJSONArray("items");
-            for(int i =0; i<items.length();i++){
+            for (int i = 0; i < items.length(); i++) {
                 JSONObject seperateObject = (JSONObject) items.get(i);
                 JSONObject volumeInfo = seperateObject.getJSONObject("volumeInfo");
                 String title = volumeInfo.getString("title");
                 String author = "";
                 String authors = "";
-                if(volumeInfo.has("authors")) {
+                if (volumeInfo.has("authors")) {
                     JSONArray authorsArray = volumeInfo.getJSONArray("authors");
-                    if(authorsArray.length()>1) {
+                    if (authorsArray.length() > 1) {
                         for (int j = 0; j < authorsArray.length(); j++) {
-                            if(j==(authorsArray.length())-1){
+                            if (j == (authorsArray.length()) - 1) {
                                 author += authorsArray.getString(j);
-                            }else {
+                            } else {
                                 author += authorsArray.getString(j) + ", ";
                             }
                         }
                         authors = "By " + author;
-                    }else{
+                    } else {
                         authors = "By " + authorsArray.getString(0);
                     }
                 }
                 String thumbnail = "";
-                if(volumeInfo.has("imageLinks")) {
+                if (volumeInfo.has("imageLinks")) {
                     thumbnail = volumeInfo.getJSONObject("imageLinks").getString("smallThumbnail");
                 }
                 String pages = "";
-                if(volumeInfo.has("pageCount")) {
+                if (volumeInfo.has("pageCount")) {
 
                     int page = volumeInfo.getInt("pageCount");
-                    pages = page+" Pages";
+                    pages = page + " Pages";
                 }
 
 
-
                 String url = null;
-                if(volumeInfo.has("infoLink")) {
+                if (volumeInfo.has("infoLink")) {
                     url = volumeInfo.getString("infoLink");
                 }
                 Bitmap image = makeImage(thumbnail);
 
-                myList.add(new Word(title,authors,image,pages,url));
+                myList.add(new Word(title, authors, image, pages, url));
 
             }
-        }catch (JSONException e){
-            Log.e("QueryUtils","Problem parsing JSON",e);
+        } catch (JSONException e) {
+            Log.e("QueryUtils", "Problem parsing JSON", e);
         }
         return myList;
     }
 
-    public static List<Word> fetchBooksDataFromJson(String StringUrl){
+    public static List<Word> fetchBooksDataFromJson(String StringUrl) {
 
         URL url = null;
         url = createUrl(StringUrl);
@@ -94,65 +93,65 @@ public final class QueryUtils {
         try {
             jsonResponse = makeHttpConnection(url);
 
-        }catch (IOException e){
-            Log.e("QueryUtils", "Problem making the HTTP request.",e);
+        } catch (IOException e) {
+            Log.e("QueryUtils", "Problem making the HTTP request.", e);
         }
         List<Word> booksList = extractFeatureFromJson(jsonResponse);
         return booksList;
     }
 
-    private static URL createUrl(String url){
-        URL Url  = null;
-        if(url == null){
+    private static URL createUrl(String url) {
+        URL Url = null;
+        if (url == null) {
             return null;
         }
         try {
             Url = new URL(url);
-        }catch(MalformedURLException e){
-            Log.e("QueryUtils","MALFORMED URL",e);
+        } catch (MalformedURLException e) {
+            Log.e("QueryUtils", "MALFORMED URL", e);
         }
         return Url;
     }
 
-    private static String makeHttpConnection(URL url) throws IOException{
+    private static String makeHttpConnection(URL url) throws IOException {
 
         String jsonResponse = "";
 
-        if(url == null){
+        if (url == null) {
             return jsonResponse;
         }
         HttpURLConnection httpURLConnection = null;
         InputStream inputStream = null;
 
-        try{
+        try {
             httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setReadTimeout(15000);
             httpURLConnection.setConnectTimeout(20000);
             httpURLConnection.setRequestMethod("GET");
             httpURLConnection.connect();
 
-            if(httpURLConnection.getResponseCode() == 200){
+            if (httpURLConnection.getResponseCode() == 200) {
                 inputStream = httpURLConnection.getInputStream();
                 jsonResponse = readFromInputStream(inputStream);
-            }else{
-                Log.e("QueryUtils", "Error Response Code:"+httpURLConnection.getResponseCode());
+            } else {
+                Log.e("QueryUtils", "Error Response Code:" + httpURLConnection.getResponseCode());
             }
-        }catch (IOException e){
-            Log.e("QueryUtils","Problem retrieving the earthquake JSON results.",e);
-        }finally{
-            if(httpURLConnection!=null){
+        } catch (IOException e) {
+            Log.e("QueryUtils", "Problem retrieving the earthquake JSON results.", e);
+        } finally {
+            if (httpURLConnection != null) {
                 httpURLConnection.disconnect();
             }
-            if(inputStream!=null){
+            if (inputStream != null) {
                 inputStream.close();
             }
         }
         return jsonResponse;
     }
 
-    private static String readFromInputStream(InputStream inputStream) throws IOException{
+    private static String readFromInputStream(InputStream inputStream) throws IOException {
         StringBuilder jsonString = new StringBuilder();
-        if(inputStream!=null) {
+        if (inputStream != null) {
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream, Charset.forName("UTF-8"));
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
             String line = bufferedReader.readLine();
@@ -166,33 +165,33 @@ public final class QueryUtils {
         return jsonString.toString();
     }
 
-    private static Bitmap makeImage(String ImageUrl){
+    private static Bitmap makeImage(String ImageUrl) {
         Bitmap bitmapImage = null;
         InputStream ins = null;
 
         URL imageUrl = createUrl(ImageUrl);
 
-        if(ImageUrl == null){
+        if (ImageUrl == null) {
 
-            Log.e("Queryutils","ImageUrl null!");
+            Log.e("Queryutils", "ImageUrl null!");
             return null;
 
         }
-        try{
+        try {
 
-            HttpURLConnection httpURLConnection =(HttpURLConnection) imageUrl.openConnection();
+            HttpURLConnection httpURLConnection = (HttpURLConnection) imageUrl.openConnection();
             httpURLConnection.setReadTimeout(200000);
             httpURLConnection.setConnectTimeout(500000);
             httpURLConnection.setRequestMethod("GET");
             httpURLConnection.connect();
             int responseCode = httpURLConnection.getResponseCode();
-            if(responseCode == 200){
+            if (responseCode == 200) {
                 ins = httpURLConnection.getInputStream();
                 bitmapImage = BitmapFactory.decodeStream(ins);
             }
-        }catch (IOException e){
+        } catch (IOException e) {
 
-            Log.e("QueryUtils","Image input stream exception");
+            Log.e("QueryUtils", "Image input stream exception");
 
         }
         return bitmapImage;

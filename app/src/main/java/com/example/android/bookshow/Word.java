@@ -8,10 +8,10 @@ import android.graphics.Bitmap;
 
 public class Word {
 
-    private String  mAuthor,mTitle, mUrl,  mPages;
+    private String mAuthor, mTitle, mUrl, mPages;
     Bitmap mImage;
 
-    public Word(String title, String author, Bitmap image, String pages, String url){
+    public Word(String title, String author, Bitmap image, String pages, String url) {
         mTitle = title;
         mAuthor = author;
         mImage = image;
@@ -19,15 +19,23 @@ public class Word {
         mUrl = url;
     }
 
-    public String getAuthor(){
+    public String getAuthor() {
         return mAuthor;
     }
 
-    public String getTitle(){ return mTitle; }
+    public String getTitle() {
+        return mTitle;
+    }
 
-    public Bitmap getImage(){ return mImage; }
+    public Bitmap getImage() {
+        return mImage;
+    }
 
-    public String getPages(){ return mPages; }
+    public String getPages() {
+        return mPages;
+    }
 
-    public String getUrl(){ return mUrl; }
+    public String getUrl() {
+        return mUrl;
+    }
 }

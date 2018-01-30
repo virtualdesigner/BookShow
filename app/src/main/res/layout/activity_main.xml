@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@android:color/holo_blue_light"
-    >
+    android:orientation="vertical">
 
     <EditText
+        android:id="@+id/enterText"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
 
-        android:layout_marginTop="180dp"
+        android:layout_height="55dp"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
-        android:id="@+id/enterText"
-        android:hint="Enter the book name here..."
-        android:fontFamily="casual"/>
+        android:layout_marginTop="180dp"
+        android:fontFamily="casual"
+        android:hint="Enter the book name here..." />
+
     <Button
         android:id="@+id/bookButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Book Show"
+        android:layout_marginLeft="135dp"
         android:fontFamily="serif"
-        android:layout_marginLeft="135dp"/>
+        android:text="Book Show" />
 
 </LinearLayout>

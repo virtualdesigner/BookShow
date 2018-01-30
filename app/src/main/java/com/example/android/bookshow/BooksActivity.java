@@ -21,6 +21,7 @@ public class BooksActivity extends AppCompatActivity implements LoaderManager.Lo
     private WordAdapter mAdapter;
     private TextView emptyTextView;
     public static final int LOADER_ID = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +45,7 @@ public class BooksActivity extends AppCompatActivity implements LoaderManager.Lo
                 // Find the current earthquake that was clicked on
                 Word currentBook = mAdapter.getItem(position);
 
-                if(currentBook.getUrl()!= null) {
+                if (currentBook.getUrl() != null) {
                     // Convert the String URL into a URI object (to pass into the Intent constructor)
                     Uri booksUri = Uri.parse(currentBook.getUrl());
 
@@ -60,10 +61,10 @@ public class BooksActivity extends AppCompatActivity implements LoaderManager.Lo
 
         ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo connectivityStatus = cm.getActiveNetworkInfo();
-        if(connectivityStatus!=null && connectivityStatus.isConnectedOrConnecting()) {
+        if (connectivityStatus != null && connectivityStatus.isConnectedOrConnecting()) {
             LoaderManager loaderManager = getLoaderManager();
             loaderManager.initLoader(LOADER_ID, null, this);
-        }else{
+        } else {
             //NO INTERNET CONNECTION
             View progressBar = findViewById(R.id.progressBar);
             progressBar.setVisibility(View.GONE);

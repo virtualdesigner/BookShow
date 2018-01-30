@@ -33,10 +33,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-public static final String getBooksUrl(){
-        String url = "https://www.googleapis.com/books/v1/volumes?q="+content+"&maxResults=20";
+    public static final String getBooksUrl() {
+        String url = "https://www.googleapis.com/books/v1/volumes?q=" + content + "&maxResults=15";
         return url;
-}
+    }
 
 }
 

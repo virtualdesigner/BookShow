@@ -16,10 +16,10 @@ import java.util.ArrayList;
  * Created by SMDEEPAK on 19-01-2018.
  */
 
-public class WordAdapter extends ArrayAdapter<Word>{
+public class WordAdapter extends ArrayAdapter<Word> {
 
 
-    public WordAdapter(Context context, ArrayList<Word> words){
+    public WordAdapter(Context context, ArrayList<Word> words) {
         super(context, 0, words);
     }
 
@@ -44,7 +44,7 @@ public class WordAdapter extends ArrayAdapter<Word>{
         ImageView imageView = (ImageView) listItemView.findViewById(R.id.image);
         imageView.setImageBitmap(currentWord.getImage());
 
-        if(currentWord.getPages().length() > 0) {
+        if (currentWord.getPages().length() > 0) {
             TextView pagesCount = (TextView) listItemView.findViewById(R.id.pages);
             pagesCount.setText(currentWord.getPages());
         }
